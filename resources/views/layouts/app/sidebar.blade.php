@@ -22,19 +22,19 @@
                     </flux:sidebar.item>
                 </flux:sidebar.group>
                 <flux:sidebar.group expandable icon="circle-user-round" :heading="__('Account')" class="grid">
-                    <flux:sidebar.item icon="users" href="/groups" :current="request()->is('groups')" wire:navigate>
+                    <flux:sidebar.item icon="users" href="/groups" :current="request()->is('groups*')" wire:navigate>
                         {{ __('My groups') }}
                     </flux:sidebar.item>
-                    <flux:sidebar.item icon="package" href="/orders" :current="request()->is('orders')" wire:navigate>
+                    <flux:sidebar.item icon="shopping-cart" href="/orders" :current="request()->is('orders*')" wire:navigate>
                         {{ __('Orders') }}
                     </flux:sidebar.item>
                     <flux:sidebar.item icon="ticket" href="/wallet" :current="request()->is('wallet*')" wire:navigate>
                         {{ __('GBPass wallet') }}
                     </flux:sidebar.item>
-                    <flux:sidebar.item icon="chart-bar" href="/analytics" :current="request()->is('analytics')" wire:navigate>
+                    <flux:sidebar.item icon="chart-bar" href="/analytics" :current="request()->is('analytics*')" wire:navigate>
                         {{ __('My stats') }}
                     </flux:sidebar.item>
-                    <flux:sidebar.item icon="circle-user-round" href="/profile" :current="request()->is('profile')" wire:navigate>
+                    <flux:sidebar.item icon="cog" href="/profile" :current="request()->is('profile*')" wire:navigate>
                         {{ __('Profile') }}
                     </flux:sidebar.item>
                 </flux:sidebar.group>
