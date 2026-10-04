@@ -10,7 +10,7 @@
             <p class="text-sm text-stone-500 dark:text-stone-400">{{ '@'.$merchant->slug }}@if($merchant->location) · {{ $merchant->location }}@endif</p>
           </div>
         </div>
-        <a href="{{ $share }}" target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 rounded-lg border border-stone-300 px-3 py-1.5 text-sm font-medium hover:bg-stone-100 dark:border-stone-700 dark:hover:bg-stone-800"><flux:icon.share-2 class="size-4" /> Share shop</a>
+        <a href="{{ $share }}" wire:click="trackShare" target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 rounded-lg border border-stone-300 px-3 py-1.5 text-sm font-medium hover:bg-stone-100 dark:border-stone-700 dark:hover:bg-stone-800"><flux:icon.share-2 class="size-4" /> Share shop</a>
       </div>
       <div class="mt-4 grid grid-cols-3 gap-2 text-center sm:max-w-md">
         <div class="rounded-lg bg-stone-50 px-2 py-2.5 dark:bg-stone-800/70"><p class="text-base font-bold">{{ number_format((float) $merchant->rating_avg, 1) }}</p><p class="text-[11px] text-stone-500 dark:text-stone-400">Rating</p></div>

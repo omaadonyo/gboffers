@@ -18,7 +18,7 @@
     </div>
     <div>
       <label class="mb-1 block text-xs font-semibold text-zinc-600 dark:text-zinc-300" for="s-cat">Category</label>
-      <select id="s-cat" wire:model="category_id" class="h-11 w-full rounded-xl border-0 bg-zinc-100 px-3 text-sm dark:bg-zinc-800 dark:text-zinc-100"><option value="">Pick one…</option>@foreach($cats as $c)<option value="{{ $c->id }}">{{ $c->name }}</option>@endforeach</select>
+      <x-gb.select wire:model="category_id" id="s-cat" class="h-11 w-full rounded-xl border-0 bg-zinc-100 dark:bg-zinc-800" placeholder="Pick one…" :options="['' => 'Pick one…'] + $cats->pluck('name', 'id')->toArray()" />
     </div>
     <div>
       <label class="mb-1 block text-xs font-semibold text-zinc-600 dark:text-zinc-300" for="s-phone">Business phone</label>
@@ -33,7 +33,7 @@
     <div class="sm:col-span-2">
       <p class="mb-1 text-xs font-semibold text-zinc-600 dark:text-zinc-300">Where should buyers pay you?</p>
       <div class="grid grid-cols-3 gap-2">
-        <select wire:model="network" aria-label="Network" class="h-11 rounded-xl border-0 bg-zinc-100 px-3 text-sm dark:bg-zinc-800 dark:text-zinc-100"><option>MTN</option><option>Airtel</option><option>Bank</option></select>
+        <x-gb.select wire:model="network" aria-label="Network" class="h-11 rounded-xl border-0 bg-zinc-100 dark:bg-zinc-800" :options="['MTN' => 'MTN', 'Airtel' => 'Airtel', 'Bank' => 'Bank']" />
         <input wire:model="account_number" placeholder="Account / MoMo number" aria-label="Account number" class="h-11 rounded-xl border-0 bg-zinc-100 px-4 text-sm dark:bg-zinc-800 dark:text-zinc-100">
         <input wire:model="account_name" placeholder="Account name" aria-label="Account name" class="h-11 rounded-xl border-0 bg-zinc-100 px-4 text-sm dark:bg-zinc-800 dark:text-zinc-100">
       </div>

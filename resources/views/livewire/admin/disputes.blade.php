@@ -4,10 +4,7 @@
       <h1 class="text-xl font-bold tracking-tight text-zinc-900 dark:text-white">Disputes</h1>
       <p class="text-sm text-zinc-500 dark:text-zinc-400">Buyer–merchant conflicts, oldest unresolved first in your queue.</p>
     </div>
-    <select wire:model.live="status" aria-label="Status" class="h-10 rounded-lg border border-zinc-300 bg-white px-2 text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100">
-      <option value="">All statuses</option>
-      @foreach($statuses as $s)<option value="{{ $s->value }}">{{ str_replace('_', ' ', $s->value) }}</option>@endforeach
-    </select>
+    <x-gb.select wire:model.live="status" aria-label="Status" :options="['' => 'All statuses'] + collect($statuses)->mapWithKeys(fn($s) => [$s->value => ucfirst(str_replace('_', ' ', $s->value))])->toArray()" />
   </div>
 
   @if(session('ok'))<p class="mt-3 rounded-lg border border-emerald-300 bg-emerald-50 px-3 py-2 text-sm text-emerald-800 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">{{ session('ok') }}</p>@endif
@@ -34,11 +31,7 @@
             <textarea wire:model="resolution" rows="3" placeholder="Resolution summary (min 10 characters)…" class="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"></textarea>
             @error('resolution')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
             <div class="mt-2 flex flex-wrap items-center gap-2">
-              <select wire:model="outcome" class="h-9 rounded-lg border border-zinc-300 bg-white px-2 text-sm dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100">
-                <option value="resolved_merchant">Resolve for merchant</option>
-                <option value="resolved_customer">Resolve for customer</option>
-                <option value="closed">Close without ruling</option>
-              </select>
+              <x-gb.select wire:model="outcome" class="h-9" :options="['resolved_merchant' => 'Resolve for merchant', 'resolved_customer' => 'Resolve for customer', 'closed' => 'Close without ruling']" />
               <button wire:click="resolve" class="h-9 rounded-lg bg-brand-600 px-4 text-sm font-semibold text-white hover:bg-brand-700 dark:bg-brand-500 dark:hover:bg-brand-400">Save resolution</button>
               <button wire:click="$set('resolving', null)" class="h-9 rounded-lg border border-zinc-300 px-3 text-sm dark:border-zinc-600">Cancel</button>
             </div>

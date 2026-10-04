@@ -53,6 +53,8 @@ class Analytics extends Component
             'gangsFormed' => $gangs->count(),
             'gangsCompleted' => $gangs->whereIn('status', ['unlocked', 'completed'])->count(),
             'avgFill' => $fill,
+            'shares' => \App\Models\Share::where('merchant_id', $m->id)->count(),
+            'topShared' => \App\Models\Offer::where('merchant_id', $m->id)->withCount('shares')->orderByDesc('shares_count')->take(5)->get(),
         ])->title('Analytics — Merchant');
     }
 }

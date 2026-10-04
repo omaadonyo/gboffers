@@ -12,10 +12,7 @@
 
   <div class="mt-4 flex flex-col gap-2 md:flex-row">
     <input type="search" wire:model.live.debounce.300ms="q" placeholder="Search name or email…" aria-label="Search users" class="h-10 flex-1 rounded-lg border border-zinc-300 bg-white px-3 text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100">
-    <select wire:model.live="role" aria-label="Role" class="h-10 rounded-lg border border-zinc-300 bg-white px-2 text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100">
-      <option value="">All roles</option>
-      @foreach($roles as $r)<option value="{{ $r->value }}">{{ $r->value }}</option>@endforeach
-    </select>
+    <x-gb.select wire:model.live="role" aria-label="Role" :options="['' => 'All roles'] + collect($roles)->mapWithKeys(fn($r) => [$r->value => $r->value])->toArray()" />
   </div>
 
   <div class="mt-3 overflow-x-auto rounded-lg border border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-900">
@@ -38,9 +35,7 @@
             </td>
             <td class="px-3 py-2.5 text-zinc-600 dark:text-zinc-300">{{ $u->orders_count }} orders · {{ $u->gang_memberships_count }} groups</td>
             <td class="px-3 py-2.5">
-              <select wire:change="setRole({{ $u->id }}, $event.target.value)" class="h-8 rounded-md border border-zinc-300 bg-white px-1.5 text-xs dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100" @if($u->id === auth()->id()) disabled @endif>
-                @foreach($roles as $r)<option value="{{ $r->value }}" @selected($u->role === $r->value)>{{ $r->value }}</option>@endforeach
-              </select>
+              <x-gb.select wire:change="setRole({{ $u->id }}, $event.target.value)" class="h-8 text-xs" :disabled="$u->id === auth()->id()" :options="collect($roles)->mapWithKeys(fn($r) => [$r->value => $r->value])->toArray()" :value="$u->role" />
             </td>
             <td class="px-3 py-2.5">
               <div class="flex flex-wrap gap-1">

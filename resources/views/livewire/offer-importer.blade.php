@@ -33,10 +33,7 @@
         @if(!$fixedMerchantId)
           <div>
             <label class="mb-1 block text-xs font-semibold text-stone-600 dark:text-stone-300">Merchant</label>
-            <select wire:model="merchant_id" class="h-10 w-full rounded-xl border-0 bg-stone-100 px-3 text-sm dark:bg-stone-800 dark:text-stone-100">
-              <option value="">Choose merchant…</option>
-              @foreach($merchants as $m)<option value="{{ $m->id }}">{{ $m->trading_name ?? $m->business_name }}</option>@endforeach
-            </select>
+            <x-gb.select wire:model="merchant_id" class="h-10 w-full rounded-xl border-0 bg-stone-100 dark:bg-stone-800" placeholder="Choose merchant…" :options="['' => 'Choose merchant…'] + $merchants->mapWithKeys(fn($m) => [$m->id => ($m->trading_name ?? $m->business_name)])->toArray()" />
           </div>
         @endif
         <div>
@@ -61,7 +58,7 @@
         </div>
         <div>
           <label class="mb-1 block text-xs font-semibold text-stone-600 dark:text-stone-300">Category</label>
-          <select wire:model="category_id" class="h-10 w-full rounded-xl border-0 bg-stone-100 px-2 text-sm dark:bg-stone-800 dark:text-stone-100"><option value="">Pick later…</option>@foreach($cats as $c)<option value="{{ $c->id }}">{{ $c->name }}</option>@endforeach</select>
+          <x-gb.select wire:model="category_id" class="h-10 w-full rounded-xl border-0 bg-stone-100 dark:bg-stone-800" placeholder="Pick later…" :options="['' => 'Pick later…'] + $cats->pluck('name', 'id')->toArray()" />
         </div>
         <button type="button" wire:click="create" wire:loading.attr="disabled" wire:target="create" class="inline-flex h-11 w-full items-center justify-center gap-1.5 rounded-full bg-brand-600 text-sm font-bold text-white hover:bg-brand-700 disabled:opacity-60 dark:bg-brand-500 dark:hover:bg-brand-400">
           <span wire:loading.remove wire:target="create">Create offer</span>

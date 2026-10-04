@@ -29,6 +29,9 @@ class Insights extends Component
             'topOffers' => Offer::with('merchant')->withCount('viewLogs')->orderByDesc('view_logs_count')->take(10)->get(),
             'topTerms' => SearchTerm::orderByDesc('hits')->take(15)->get(),
             'totalSearches' => (int) SearchTerm::sum('hits'),
+            'totalShares' => \App\Models\Share::count(),
+            'sharesByChannel' => \App\Models\Share::selectRaw('channel, COUNT(*) c')->groupBy('channel')->get(),
+            'topShared' => Offer::with('merchant')->withCount('shares')->orderByDesc('shares_count')->take(5)->get(),
         ])->title('Insights — Admin');
     }
 }

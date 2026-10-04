@@ -10,7 +10,7 @@ use Illuminate\Support\Carbon;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
-#[Layout('layouts.storefront')]
+#[Layout('layouts.app')]
 class Analytics extends Component
 {
     public function render(): View

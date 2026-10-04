@@ -28,6 +28,12 @@ class WantedIndex extends Component
 
     public ?int $responding = null;
 
+    public ?int $editing = null;
+
+    public string $e_title = '';
+
+    public int $e_budget = 0;
+
     public string $r_message = '';
 
     public int $r_price = 0;
@@ -92,6 +98,30 @@ class WantedIndex extends Component
     {
         $this->responding = $this->responding === $id ? null : $id;
         $this->reset(['r_message', 'r_price', 'r_name', 'r_contact']);
+    }
+
+    public function edit(int $id): void
+    {
+        $row = \App\Models\WantedRequest::findOrFail($id);
+        abort_unless(auth()->check() && (int) $row->user_id === (int) auth()->id(), 403);
+        $this->editing = $row->id;
+        $this->e_title = $row->title;
+        $this->e_budget = $row->budget;
+    }
+
+    public function cancelEdit(): void
+    {
+        $this->reset(['editing', 'e_title', 'e_budget']);
+    }
+
+    public function update(): void
+    {
+        $row = \App\Models\WantedRequest::findOrFail($this->editing);
+        abort_unless(auth()->check() && (int) $row->user_id === (int) auth()->id(), 403);
+        $this->validate(['e_title' => 'required|min:3', 'e_budget' => 'required|integer|min:1000']);
+        $row->update(['title' => $this->e_title, 'budget' => $this->e_budget]);
+        $this->cancelEdit();
+        session()->flash('ok', 'Request updated.');
     }
 
     public function sendResponse(): void

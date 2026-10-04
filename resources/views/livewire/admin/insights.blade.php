@@ -49,5 +49,23 @@
         @empty<p class="py-3 text-xs text-zinc-500">No searches tracked yet.</p>@endforelse
       </div>
     </div>
+  <div class="mt-3 grid gap-2.5 lg:grid-cols-2">
+    <div class="rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-700 dark:bg-zinc-900">
+      <div class="flex items-baseline justify-between">
+        <h2 class="flex items-center gap-1.5 text-sm font-bold text-zinc-900 dark:text-zinc-100"><flux:icon.share-2 class="size-4" /> Shares</h2>
+        <span class="rounded-lg bg-zinc-100 px-2.5 py-1 text-xs font-bold text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">{{ number_format($totalShares) }} total</span>
+      </div>
+      <div class="mt-2 flex flex-wrap gap-1.5">
+        @forelse($sharesByChannel as $s)<span class="rounded-md bg-zinc-100 px-2 py-1 text-xs font-bold text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">{{ $s->channel }}: {{ number_format($s->c) }}</span>@empty<span class="text-xs text-zinc-500">No shares tracked yet.</span>@endforelse
+      </div>
+      <div class="mt-2 divide-y divide-zinc-100 dark:divide-zinc-800">
+        @foreach($topShared as $o)
+          <a href="{{ route('offers.show', $o->slug) }}" class="flex items-center justify-between gap-2 py-2 text-sm">
+            <span class="min-w-0 truncate font-medium text-zinc-900 dark:text-zinc-100">{{ $o->title }}</span>
+            <span class="shrink-0 text-xs font-bold text-zinc-600 dark:text-zinc-300">{{ $o->shares_count }} shares</span>
+          </a>
+        @endforeach
+      </div>
+    </div>
   </div>
 </div>

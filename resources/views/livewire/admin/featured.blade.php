@@ -11,10 +11,7 @@
   </div>
 
   <div class="mt-4">
-    <select wire:model.live="status" aria-label="Status" class="h-10 rounded-lg border border-zinc-300 bg-white px-2 text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100">
-      <option value="">All statuses</option>
-      @foreach(['pending','active','rejected','cancelled','expired'] as $s)<option value="{{ $s }}">{{ ucfirst($s) }}</option>@endforeach
-    </select>
+    <x-gb.select wire:model.live="status" aria-label="Status" :options="['' => 'All statuses', 'pending' => 'Pending', 'active' => 'Active', 'rejected' => 'Rejected', 'cancelled' => 'Cancelled', 'expired' => 'Expired']" />
   </div>
 
   <div class="mt-3 space-y-2">

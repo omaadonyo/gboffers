@@ -38,10 +38,15 @@
           </div>
         @endif
 
-        <div class="mt-2.5">
+        <div class="mt-2.5 flex items-center gap-3">
           <button type="button" wire:click="respond({{ $r->id }})" class="inline-flex items-center gap-1 text-xs font-bold text-brand-700 hover:underline dark:text-brand-300">
             <flux:icon.chat-bubble-left class="size-3.5" /> {{ $responding === $r->id ? 'Cancel' : 'Respond with your price' }}
           </button>
+          @if(auth()->check() && $r->user_id && (int) $r->user_id === (int) auth()->id())
+            <button type="button" wire:click="edit({{ $r->id }})" class="inline-flex items-center gap-1 text-xs font-semibold text-stone-500 hover:text-stone-900 hover:underline dark:text-stone-400 dark:hover:text-white">
+              <flux:icon.pencil class="size-3.5" /> Edit
+            </button>
+          @endif
         </div>
 
         @if($responding === $r->id)
@@ -105,6 +110,34 @@
           <button class="h-11 w-full rounded-xl bg-brand-600 text-sm font-bold text-white hover:bg-brand-700 dark:bg-brand-500 dark:hover:bg-brand-400">Post request</button>
           @guest<p class="text-center text-xs text-stone-400 dark:text-stone-500"><a href="{{ route('register') }}" class="font-medium underline">Join free</a> to manage your requests.</p>@endguest
         </form>
+      </div>
+    </div>
+  @endif
+
+  @if($editing)
+    <div class="fixed inset-0 z-50 grid place-items-center p-4" role="dialog" aria-modal="true" aria-label="Edit request">
+      <div class="absolute inset-0 bg-black/50" wire:click="cancelEdit"></div>
+      <div class="relative w-full max-w-md rounded-2xl bg-white p-5 shadow-2xl dark:bg-stone-900" x-data @keydown.escape.window="$wire.cancelEdit()">
+        <h2 class="text-base font-bold text-stone-900 dark:text-white">Edit request</h2>
+        <div class="mt-3 space-y-2.5">
+          <div>
+            <label class="mb-1 block text-xs font-semibold text-stone-600 dark:text-stone-300">What do you want?</label>
+            <input wire:model="e_title" class="h-11 w-full rounded-xl border-0 bg-stone-100 px-4 text-sm dark:bg-stone-800 dark:text-stone-100">
+            @error('e_title')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
+          </div>
+          <div>
+            <label class="mb-1 block text-xs font-semibold text-stone-600 dark:text-stone-300">Budget (UGX)</label>
+            <input wire:model="e_budget" type="number" class="h-11 w-full rounded-xl border-0 bg-stone-100 px-4 text-sm dark:bg-stone-800 dark:text-stone-100">
+            @error('e_budget')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
+          </div>
+        </div>
+        <div class="mt-4 flex gap-2">
+          <button type="button" wire:click="cancelEdit" class="h-10 flex-1 rounded-full border border-stone-300 text-sm dark:border-stone-700">Cancel</button>
+          <button type="button" wire:click="update" wire:loading.attr="disabled" wire:target="update" class="inline-flex h-10 flex-1 items-center justify-center gap-1.5 rounded-full bg-brand-600 text-sm font-bold text-white hover:bg-brand-700 disabled:opacity-60 dark:bg-brand-500 dark:hover:bg-brand-400">
+            <span wire:loading.remove wire:target="update">Save changes</span>
+            <span wire:loading wire:target="update" class="inline-flex items-center gap-1.5"><flux:icon.loading class="size-4 animate-spin" /> Saving…</span>
+          </button>
+        </div>
       </div>
     </div>
   @endif

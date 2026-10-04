@@ -43,6 +43,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->configureDefaults();
+        $this->configureMailTemplates();
         date_default_timezone_set(config('gboffers.timezone', 'Africa/Kampala'));
 
         Gate::policy(Offer::class, OfferPolicy::class);
@@ -57,6 +58,30 @@ class AppServiceProvider extends ServiceProvider
 
         RateLimiter::for('join-gang', fn (Request $r) => Limit::perMinute(10)->by($r->user()?->id ?: $r->ip()));
         RateLimiter::for('scanner', fn (Request $r) => Limit::perMinute(60)->by($r->user()?->id ?: $r->ip()));
+    }
+
+    /**
+     * Branded, minimal mail templates used across the platform.
+     */
+    protected function configureMailTemplates(): void
+    {
+        \Illuminate\Auth\Notifications\VerifyEmail::toMailUsing(function ($notifiable, $url) {
+            return (new \Illuminate\Notifications\Messages\MailMessage)
+                ->subject('Verify your GBOffers email')
+                ->greeting('Hello '.($notifiable->displayName() ?? $notifiable->name).',')
+                ->line('Thanks for joining GBOffers — group up, pay less. Please confirm this email address to secure your account.')
+                ->action('Verify email address', $url)
+                ->line('The link expires in 60 minutes. If you did not create this account, ignore this email.');
+        });
+
+        \Illuminate\Auth\Notifications\ResetPassword::toMailUsing(function ($notifiable, $token) {
+            return (new \Illuminate\Notifications\Messages\MailMessage)
+                ->subject('Reset your GBOffers password')
+                ->greeting('Hello '.($notifiable->displayName() ?? $notifiable->name).',')
+                ->line('We received a password reset request for your account.')
+                ->action('Reset password', url(route('password.reset', ['token' => $token, 'email' => $notifiable->getEmailForPasswordReset()], false)))
+                ->line('The link expires in 60 minutes. If you did not ask for this, ignore this email.');
+        });
     }
 
     /**

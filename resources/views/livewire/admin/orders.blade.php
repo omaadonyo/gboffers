@@ -9,14 +9,8 @@
 
   <div class="mt-4 flex flex-col gap-2 md:flex-row">
     <input type="search" wire:model.live.debounce.300ms="q" placeholder="Search id, reference, customer…" aria-label="Search orders" class="h-10 flex-1 rounded-lg border border-zinc-300 bg-white px-3 text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100">
-    <select wire:model.live="status" aria-label="Status" class="h-10 rounded-lg border border-zinc-300 bg-white px-2 text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100">
-      <option value="">All statuses</option>
-      @foreach($statuses as $s)<option value="{{ $s->value }}">{{ $s->value }}</option>@endforeach
-    </select>
-    <select wire:model.live="payment" aria-label="Payment" class="h-10 rounded-lg border border-zinc-300 bg-white px-2 text-sm dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100">
-      <option value="">All payments</option>
-      @foreach($payments as $p)<option value="{{ $p->value }}">{{ $p->value }}</option>@endforeach
-    </select>
+    <x-gb.select wire:model.live="status" aria-label="Status" :options="['' => 'All statuses'] + collect($statuses)->mapWithKeys(fn($s) => [$s->value => $s->value])->toArray()" />
+    <x-gb.select wire:model.live="payment" aria-label="Payment" :options="['' => 'All payments'] + collect($payments)->mapWithKeys(fn($p) => [$p->value => $p->value])->toArray()" />
   </div>
 
   <div class="mt-3 overflow-x-auto rounded-lg border border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-900">

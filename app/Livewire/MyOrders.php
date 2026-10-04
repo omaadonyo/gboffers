@@ -8,7 +8,7 @@ use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-#[Layout('layouts.storefront')]
+#[Layout('layouts.app')]
 class MyOrders extends Component
 {
     use WithPagination;

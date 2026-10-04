@@ -45,12 +45,14 @@ class SendInAppNotification
                 'Pass '.$event->pass->token.' was redeemed at your shop.',
                 '/merchant/orders',
                 'ticket',
+                mail: false,
             ));
             $event->pass->customer?->notify(new PlatformNotification(
                 'Pass redeemed',
                 'Your pass '.$event->pass->token.' was redeemed. Enjoy!',
                 '/wallet',
                 'ticket',
+                mail: false,
             ));
         }
         if ($event instanceof OrderFulfilled) {
@@ -67,6 +69,7 @@ class SendInAppNotification
                 'Your held spot was released. Join again before the group fills up.',
                 '/groups',
                 'clock',
+                mail: false,
             ));
         }
         if ($event instanceof MerchantVerified) {

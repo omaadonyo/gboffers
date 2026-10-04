@@ -15,6 +15,7 @@ class Offer extends Model {
     public function images(): HasMany { return $this->hasMany(OfferImage::class)->orderBy('sort'); }
     public function gangs(): HasMany { return $this->hasMany(Gang::class); }
     public function viewLogs(): HasMany { return $this->hasMany(OfferView::class); }
+    public function shares(): HasMany { return $this->hasMany(Share::class); }
     public function featuredListings(): HasMany { return $this->hasMany(FeaturedListing::class)->latest(); }
     public function activeFeature(): ?FeaturedListing {
         return $this->featuredListings->first(fn ($f) => $f->status === 'active' && (! $f->ends_at || $f->ends_at->isFuture()));

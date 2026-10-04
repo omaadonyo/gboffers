@@ -3,7 +3,7 @@
   <div class="mt-3 flex flex-col gap-2 md:flex-row md:items-center">
     <input type="search" wire:model.live.debounce.300ms="q" placeholder="Search products, merchants…" aria-label="Search" class="h-10 flex-1 rounded-full border-0 bg-stone-100 px-4 text-sm dark:bg-stone-800 dark:text-stone-100">
     <div class="flex items-center gap-2">
-      <select wire:model.live="sort" class="h-10 rounded-full border-0 bg-stone-100 px-3 text-sm dark:bg-stone-800 dark:text-stone-100" aria-label="Sort"><option value="popular">Popular</option><option value="ending">Ending soon</option><option value="new">Newly added</option></select>
+      <x-gb.select wire:model.live="sort" class="h-10 rounded-full border-0 bg-stone-100 dark:bg-stone-800" aria-label="Sort" :options="['popular' => 'Popular', 'ending' => 'Ending soon', 'new' => 'Newly added']" />
       <div class="flex rounded-full bg-stone-100 p-1 dark:bg-stone-800" role="group" aria-label="Display view">
         @foreach([['grid','layout-grid','Grid'],['list','list-bullet','List'],['showcase','sparkles','Showcase']] as [$v,$i,$l])
           <button type="button" wire:click="setView('{{ $v }}')" title="{{ $l }} view" aria-label="{{ $l }} view" aria-pressed="{{ $view === $v ? 'true' : 'false' }}" class="grid size-8 place-items-center rounded-full transition {{ $view === $v ? 'bg-white text-stone-900 shadow-sm dark:bg-stone-950 dark:text-white' : 'text-stone-400 hover:text-stone-700 dark:text-stone-500 dark:hover:text-stone-200' }}"><flux:icon :name="$i" class="size-4" /></button>

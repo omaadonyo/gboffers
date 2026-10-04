@@ -14,11 +14,24 @@ class PlatformNotification extends Notification
         public string $body = '',
         public string $url = '/dashboard',
         public string $icon = 'bell',
+        public bool $mail = true,
     ) {}
 
     public function via(object $notifiable): array
     {
-        return ['database'];
+        return $this->mail ? ['database', 'mail'] : ['database'];
+    }
+
+    public function toMail(object $notifiable): \Illuminate\Notifications\Messages\MailMessage
+    {
+        $name = method_exists($notifiable, 'displayName') ? ($notifiable->displayName() ?? $notifiable->name) : $notifiable->name;
+
+        return (new \Illuminate\Notifications\Messages\MailMessage)
+            ->subject($this->title.' — GBOffers')
+            ->greeting('Hello '.$name.',')
+            ->line($this->body)
+            ->action('View in GBOffers', url($this->url))
+            ->line('You can manage notifications from your account at any time.');
     }
 
     public function toArray(object $notifiable): array

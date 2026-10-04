@@ -109,7 +109,7 @@
             </button>
             <button wire:click="$set('showJoin', true)" class="h-11 rounded-full border border-stone-300 text-sm font-semibold hover:bg-stone-100 dark:border-stone-700 dark:hover:bg-stone-800">Confirm &amp; pay directly</button>
           @endif
-          @if(isset($share))<a href="{{ $share }}" target="_blank" rel="noopener" class="inline-flex h-10 items-center justify-center gap-1.5 rounded-full text-xs font-semibold text-stone-500 hover:text-stone-900 dark:text-stone-400 dark:hover:text-white"><flux:icon.share-2 class="size-3.5" /> Invite friends on WhatsApp</a>@endif
+          @if(isset($share))<a href="{{ $share }}" wire:click="trackShare" target="_blank" rel="noopener" class="inline-flex h-10 items-center justify-center gap-1.5 rounded-full text-xs font-semibold text-stone-500 hover:text-stone-900 dark:text-stone-400 dark:hover:text-white"><flux:icon.share-2 class="size-3.5" /> Invite friends on WhatsApp</a>@endif
         </div>
 
         <div class="mt-3 flex items-center gap-4 border-t border-stone-100 pt-3 text-[11px] text-stone-500 dark:border-stone-800 dark:text-stone-400">

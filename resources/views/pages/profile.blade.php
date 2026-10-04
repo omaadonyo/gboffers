@@ -1,4 +1,4 @@
-<x-layouts.storefront nav="profile" title="Profile — GBOffers">
+<x-layouts::app title="Profile — GBOffers">
 @php $u = auth()->user(); @endphp
 <div class="mx-auto max-w-2xl">
   <div class="flex items-center gap-4 rounded-lg bg-white p-5 shadow-sm dark:bg-stone-900">
@@ -42,4 +42,4 @@
     </form>
   </div>
 </div>
-</x-layouts.storefront>
+</x-layouts::app>

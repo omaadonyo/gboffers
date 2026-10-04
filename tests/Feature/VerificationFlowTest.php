@@ -46,4 +46,21 @@ class VerificationFlowTest extends TestCase
             ->assertSee('Explore')
             ->assertSee('Wanted');
     }
+
+    public function test_customer_dashboard_side_hub(): void
+    {
+        $customer = User::factory()->create(['role' => 'customer', 'email_verified_at' => now()]);
+
+        $this->actingAs($customer)->get('/dashboard')
+            ->assertOk()
+            ->assertSee('My groups')
+            ->assertSee('GBPass wallet')
+            ->assertSee('My stats')
+            ->assertSee('w-3/4', false);
+
+        $this->actingAs($customer)->get('/orders')->assertOk()->assertSee('My orders');
+        $this->actingAs($customer)->get('/wallet')->assertOk();
+        $this->actingAs($customer)->get('/analytics')->assertOk()->assertSee('My stats');
+        $this->actingAs($customer)->get('/profile')->assertOk();
+    }
 }

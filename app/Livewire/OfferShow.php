@@ -32,6 +32,10 @@ class OfferShow extends Component {
         app(GangService::class)->markInterested(auth()->user(), $this->offer);
         $this->notice = 'Saved as interested. This does not count toward the group target — only confirmed buyers count.';
     }
+    public function trackShare(): void {
+        $gang = $this->offer->gangs->firstWhere('status','forming') ?? $this->offer->gangs->first();
+        app(ShareService::class)->track(auth()->user(), $this->offer, $gang, 'whatsapp');
+    }
     public function confirmJoin(): void {
         $gang = app(GangService::class)->openGang($this->offer);
         $price = app(PricingService::class)->priceFor($this->offer, $gang->confirmed_count);

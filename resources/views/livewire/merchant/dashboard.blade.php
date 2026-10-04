@@ -9,9 +9,7 @@
     </div>
     <div class="flex gap-1.5">
       @if(auth()->user()?->isAdmin())
-        <select wire:change="switchMerchant($event.target.value)" aria-label="View merchant" class="h-9 rounded-lg border border-amber-300 bg-amber-50 px-2 text-sm font-medium text-amber-900 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-200">
-          @foreach($this->merchantChoices() as $c)<option value="{{ $c['slug'] }}" @selected($c['slug'] === $this->merchant->slug)>{{ $c['name'] }}</option>@endforeach
-        </select>
+        <x-gb.select wire:change="switchMerchant($event.target.value)" aria-label="View merchant" class="h-9 border-amber-300 bg-amber-50 text-amber-900 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-200" :options="collect($this->merchantChoices())->pluck('name', 'slug')->toArray()" :value="$this->merchant->slug" />
       @endif
       <a href="/merchant/scan" class="inline-flex items-center gap-1.5 rounded-lg bg-brand-600 px-3.5 py-2 text-sm font-semibold text-white hover:bg-brand-700 dark:bg-brand-500 dark:hover:bg-brand-400"><flux:icon.qr-code class="size-4" /> Scan GBPass</a>
       <a href="{{ route('merchants.show', $this->merchant->slug) }}" class="inline-flex items-center gap-1.5 rounded-lg border border-zinc-300 px-3.5 py-2 text-sm font-medium hover:bg-zinc-100 dark:border-zinc-600 dark:hover:bg-zinc-800"><flux:icon.store class="size-4" /> View my page</a>

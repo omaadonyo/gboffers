@@ -44,6 +44,13 @@ class GlobalSearch extends Component
         $popular = collect();
 
         if ($this->open && mb_strlen($q) >= 2) {
+            $term = mb_strtolower(mb_substr($q, 0, 120));
+            $seen = 'searched:'.session()->getId().':'.md5($term);
+            if (\Illuminate\Support\Facades\Cache::add($seen, true, 3600)) {
+                $row = \App\Models\SearchTerm::firstOrCreate(['term' => $term]);
+                $row->increment('hits');
+                $row->update(['last_searched_at' => now()]);
+            }
             $offers = Offer::with(['merchant', 'gangs'])
                 ->where('status', 'active')
                 ->where(fn ($w) => $w->where('title', 'like', '%'.$q.'%')->orWhere('description', 'like', '%'.$q.'%'))

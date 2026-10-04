@@ -18,7 +18,7 @@
     <input wire:model="title" placeholder="Offer title" aria-label="Offer title" class="h-10 rounded-lg border border-zinc-300 px-3 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100">
     <input wire:model="normal_price" type="number" placeholder="Normal price (UGX)" aria-label="Normal price" class="h-10 rounded-lg border border-zinc-300 px-3 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100">
     <input wire:model="gang_target" type="number" placeholder="Group target (buyers)" aria-label="Group target" class="h-10 rounded-lg border border-zinc-300 px-3 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100">
-    <select wire:model="category_id" aria-label="Category" class="h-10 rounded-lg border border-zinc-300 px-2 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"><option value="">Category…</option>@foreach($cats as $c)<option value="{{ $c->id }}">{{ $c->name }}</option>@endforeach</select>
+    <x-gb.select wire:model="category_id" aria-label="Category" placeholder="Category…" :options="['' => 'Category…'] + $cats->pluck('name', 'id')->toArray()" />
     <input wire:model="tiers" placeholder="Price tiers — e.g. 5:1650000,10:1550000" aria-label="Price tiers" class="h-10 rounded-lg border border-zinc-300 px-3 md:col-span-2 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100">
     <div class="md:col-span-2">
       <textarea wire:model="audiences" rows="2" placeholder="Group discounts — one per line, e.g.&#10;Students:5:150000&#10;Staff SACCO:10:140000" aria-label="Group discounts" class="w-full rounded-lg border border-zinc-300 px-3 py-2 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"></textarea>
@@ -44,6 +44,7 @@
           @if($fl)<p class="mt-1 inline-flex items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 text-[11px] font-bold text-amber-800 dark:bg-amber-950 dark:text-amber-300"><flux:icon.sparkles class="size-3" /> Featured {{ $fl->status }} · {{ $fl->days }}d</p>@endif
         </div>
         <div class="flex shrink-0 gap-1.5">
+          <button wire:click="edit({{ $o->id }})" class="rounded-md border border-zinc-300 px-2.5 py-1.5 text-xs font-medium hover:bg-zinc-100 dark:border-zinc-600 dark:hover:bg-zinc-800">Edit</button>
           <button wire:click="feature({{ $o->id }})" class="rounded-md border border-zinc-300 px-2.5 py-1.5 text-xs font-medium hover:bg-zinc-100 dark:border-zinc-600 dark:hover:bg-zinc-800">Feature</button>
           <button wire:click="toggleStatus({{ $o->id }})" class="rounded-md border border-zinc-300 px-2.5 py-1.5 text-xs font-medium hover:bg-zinc-100 dark:border-zinc-600 dark:hover:bg-zinc-800">{{ $o->status === 'active' ? 'Pause' : 'Activate' }}</button>
           <button wire:click="destroy({{ $o->id }})" wire:confirm="Delete this offer?" class="rounded-md border border-red-300 px-2.5 py-1.5 text-xs font-medium text-red-600 hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-950/40">Delete</button>
@@ -68,6 +69,49 @@
         <div class="mt-3 flex gap-2">
           <button type="button" wire:click="$set('featuring', null)" class="h-10 flex-1 rounded-full border border-zinc-300 text-sm dark:border-zinc-600">Cancel</button>
           <button type="button" wire:click="submitFeature" class="h-10 flex-1 rounded-full bg-brand-600 text-sm font-bold text-white hover:bg-brand-700 dark:bg-brand-500 dark:hover:bg-brand-400">Request</button>
+        </div>
+      </div>
+    </div>
+  @endif
+  @if($editing)
+    <div class="fixed inset-0 z-50 grid place-items-center p-4" role="dialog" aria-modal="true" aria-label="Edit offer">
+      <div class="absolute inset-0 bg-black/50" wire:click="cancelEdit"></div>
+      <div class="relative max-h-[90vh] w-full max-w-md overflow-y-auto rounded-2xl bg-white p-5 shadow-2xl dark:bg-zinc-900" x-data @keydown.escape.window="$wire.cancelEdit()">
+        <h2 class="text-base font-bold text-zinc-900 dark:text-white">Edit offer</h2>
+        <div class="mt-3 grid gap-2.5 text-sm md:grid-cols-2">
+          <div class="md:col-span-2">
+            <label class="mb-1 block text-xs font-semibold text-zinc-600 dark:text-zinc-300">Title</label>
+            <input wire:model="e_title" class="h-10 w-full rounded-xl border-0 bg-zinc-100 px-3 dark:bg-zinc-800 dark:text-zinc-100">
+            @error('e_title')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
+          </div>
+          <div>
+            <label class="mb-1 block text-xs font-semibold text-zinc-600 dark:text-zinc-300">Normal price (UGX)</label>
+            <input wire:model="e_price" type="number" class="h-10 w-full rounded-xl border-0 bg-zinc-100 px-3 dark:bg-zinc-800 dark:text-zinc-100">
+            @error('e_price')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
+          </div>
+          <div>
+            <label class="mb-1 block text-xs font-semibold text-zinc-600 dark:text-zinc-300">Group target</label>
+            <input wire:model="e_target" type="number" class="h-10 w-full rounded-xl border-0 bg-zinc-100 px-3 dark:bg-zinc-800 dark:text-zinc-100">
+          </div>
+          <div class="md:col-span-2">
+            <label class="mb-1 block text-xs font-semibold text-zinc-600 dark:text-zinc-300">Category</label>
+            <x-gb.select wire:model="e_category" :options="['' => 'No category'] + $cats->pluck('name', 'id')->toArray()" />
+          </div>
+          <div class="md:col-span-2">
+            <label class="mb-1 block text-xs font-semibold text-zinc-600 dark:text-zinc-300">Price tiers (min:price,…)</label>
+            <input wire:model="e_tiers" class="h-10 w-full rounded-xl border-0 bg-zinc-100 px-3 dark:bg-zinc-800 dark:text-zinc-100">
+          </div>
+          <div class="md:col-span-2">
+            <label class="mb-1 block text-xs font-semibold text-zinc-600 dark:text-zinc-300">Group discounts (one per line)</label>
+            <textarea wire:model="e_audiences" rows="2" class="w-full rounded-xl border-0 bg-zinc-100 px-3 py-2 dark:bg-zinc-800 dark:text-zinc-100"></textarea>
+          </div>
+        </div>
+        <div class="mt-4 flex gap-2">
+          <button type="button" wire:click="cancelEdit" class="h-10 flex-1 rounded-full border border-zinc-300 text-sm dark:border-zinc-600">Cancel</button>
+          <button type="button" wire:click="update" wire:loading.attr="disabled" wire:target="update" class="inline-flex h-10 flex-1 items-center justify-center gap-1.5 rounded-full bg-brand-600 text-sm font-bold text-white hover:bg-brand-700 disabled:opacity-60 dark:bg-brand-500 dark:hover:bg-brand-400">
+            <span wire:loading.remove wire:target="update">Save changes</span>
+            <span wire:loading wire:target="update" class="inline-flex items-center gap-1.5"><flux:icon.loading class="size-4 animate-spin" /> Saving…</span>
+          </button>
         </div>
       </div>
     </div>

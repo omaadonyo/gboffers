@@ -24,6 +24,11 @@ class MerchantStorefront extends Component
         $this->merchant = $merchant;
     }
 
+    public function trackShare(): void
+    {
+        app(\App\Services\ShareService::class)->track(auth()->user(), null, null, 'whatsapp', $this->merchant);
+    }
+
     public function render(): View
     {
         $m = $this->merchant;

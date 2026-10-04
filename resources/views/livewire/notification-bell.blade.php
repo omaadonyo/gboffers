@@ -34,7 +34,7 @@
                 $url = $d['url'] ?? (isset($d['gang_id']) ? '/groups' : (isset($d['order_id']) ? '/orders' : '/dashboard'));
                 $icon = $d['icon'] ?? 'bell';
             @endphp
-            <a href="{{ $url }}" class="flex items-start gap-2.5 px-3 py-2.5 hover:bg-stone-50 dark:hover:bg-stone-800 {{ $n->read_at ? '' : 'bg-brand-50/60 dark:bg-brand-950/30' }}">
+            <a href="{{ $url }}" class="flex items-start gap-2.5 px-3 py-2.5 hover:bg-stone-50 dark:hover:bg-stone-800 {{ $n->read_at ? '' : 'bg-brand-50 dark:bg-brand-500/15' }}">
                 <span class="grid size-8 shrink-0 place-items-center rounded-lg {{ $n->read_at ? 'bg-stone-100 text-stone-500 dark:bg-stone-800 dark:text-stone-400' : 'bg-brand-600 text-white dark:bg-brand-500' }}"><flux:icon :name="$icon" class="size-4" /></span>
                 <span class="min-w-0 flex-1">
                     <span class="block text-sm font-semibold text-stone-900 dark:text-stone-100">{{ $title }}</span>
