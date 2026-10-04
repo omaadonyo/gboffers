@@ -1,0 +1,1 @@
+<x-layouts::app :title="$title ?? 'Merchant'"><div class="p-4 text-sm">See merchant navigation for {{ $title }}.</div></x-layouts::app>

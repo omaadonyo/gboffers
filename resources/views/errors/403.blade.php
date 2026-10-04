@@ -1,0 +1,1 @@
+@extends('layouts.error', ['code' => '403', 'title' => 'Not allowed', 'heading' => 'You cannot go there', 'message' => 'This area needs a different account type — merchants see shops, admins see the console. Log in with the right account or ask for access.'])

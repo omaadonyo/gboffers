@@ -1,0 +1,1 @@
+<div><x-gb.gang-progress :confirmed="$gang->confirmed_count" :target="$gang->target" :next-price="$nextPrice" :ends-at="$gang->expires_at" /></div>

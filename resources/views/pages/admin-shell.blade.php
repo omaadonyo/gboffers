@@ -1,0 +1,1 @@
+<x-layouts::app :title="$title ?? 'Admin'"><div class="p-4"><h1 class="font-bold">{{ $title }}</h1><p class="text-sm text-stone-500">Admin tooling ships with the dashboard metrics; extend per moderation queue.</p></div></x-layouts::app>

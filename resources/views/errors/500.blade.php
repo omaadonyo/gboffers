@@ -1,0 +1,1 @@
+@extends('layouts.error', ['code' => '500', 'title' => 'Server error', 'heading' => 'Something broke on our side', 'message' => 'Our team has been notified. Please try again in a moment — your groups and passes are safe.'])

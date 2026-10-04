@@ -1,0 +1,1 @@
+@extends('layouts.error', ['code' => '404', 'title' => 'Page not found', 'heading' => 'This page wandered off', 'message' => 'The link may be broken, the offer may have ended, or the shop may be under review. Try searching instead.'])

@@ -1,0 +1,1 @@
+@extends('layouts.error', ['code' => '503', 'title' => 'Under maintenance', 'heading' => 'Back in a moment', 'message' => 'We are doing quick maintenance to keep group buying smooth. Please check back shortly.'])

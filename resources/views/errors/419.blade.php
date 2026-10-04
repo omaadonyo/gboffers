@@ -1,0 +1,1 @@
+@extends('layouts.error', ['code' => '419', 'title' => 'Session expired', 'heading' => 'Your session timed out', 'message' => 'For your security we signed out idle pages. Please log in again and retry what you were doing.'])
